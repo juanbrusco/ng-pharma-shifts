@@ -1,0 +1,27 @@
+<h2>Pharmacies</h2>
+<div class="loader" *ngIf="loading"></div>
+
+<ul class="pharmacies">
+  <li *ngFor="let p of pharmacies">
+    <span class="badge">{{p.fechaDesde|date: "dd/MM/yyyy"}}</span>
+  </li>
+</ul>
+<ul class="pharmacies">
+  <li *ngFor="let p of pharmacies">
+    <span class="badge">{{p.id}}</span> {{p.farmacia}}
+  </li>
+</ul>
+<ul class="pharmacies">
+  <li *ngFor="let p of pharmacies">
+    <span class="badge">{{p.idFarmaciaReemplazo}}</span> {{p.farmaciaReemplazo}}
+  </li>
+</ul>
+<ul class="pharmacies">
+  <li *ngFor="let p of pharmacies">
+    <select (change)="changePharmacy($event.target.value, p.id)">
+      <option *ngFor="let rp of replacePharmacies" [value]="rp.id">
+        {{rp.name}}
+      </option>
+    </select>
+  </li>
+</ul>

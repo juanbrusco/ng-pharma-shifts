@@ -1,14 +1,17 @@
 import { Component, OnInit, Injectable } from '@angular/core';
-import { ShareService } from './share.service';
+import { ShareService } from '../share.service';
 import { Observable } from 'rxjs';
-import { PharmacyTurn } from './model/pharmacy-turn';
+import { PharmacyTurn } from '../model/pharmacy-turn';
+
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  selector: 'app-index',
+  templateUrl: './index.component.html',
+  styleUrls: ['./index.component.scss']
 })
-export class AppComponent {
-  title = 'ng5firebase';
+
+@Injectable()
+export class IndexComponent implements OnInit {
+
   public shares: Observable<any[]>;
   pharmacies: PharmacyTurn[];
   replacePharmacies = [{ name: 'Del Pueblo', id: '1' },
@@ -27,33 +30,24 @@ export class AppComponent {
   { name: 'Conti', id: '14' },
   { name: 'Belmartino', id: '15' }];
   loading = false;
-  months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
-  years = ['2019', '2020', '2021', '2022', '2023', '2024', '2025', '2026', '2027', '2028', '2029', '2030'];
-  month = '01';
-  year = '2019';
-  displayedColumns: string[] = ['date', 'id', 'name', 'replace_id', 'replace_name', 'select'];
 
   constructor(private shareservice: ShareService) { }
 
   ngOnInit() {
-  }
-
-  getPharmaciesByDate() {
-    this.loading = true;
     const token = '16acd359cb1e6dced49963ac5dc350ccbccfab7e';
-    const urlMonth = 'https://wuik.com.ar/services/farmacia-admin-service-salto.php?token=' + token + '&mes=' + this.month + '&anio=' + this.year;
-    console.log(urlMonth);
+    const month = '11';
+    const year = '2019';
+    const urlMonth = 'https://wuik.com.ar/services/farmacia-admin-service-salto.php?token=' + token + '&mes=' + month + '&anio=' + year;
+
     this.shareservice
       .getListOfGroup(urlMonth)
       .subscribe(
         data => {
           this.pharmacies = data.turnos;
           console.log(this.pharmacies);
-          this.loading = false;
         },
         err => {
           console.log(err);
-          this.loading = false;
         }
       );
   }
@@ -79,15 +73,4 @@ export class AppComponent {
         }
       );
   }
-
-  changeMonth(selectedValue: string) {
-    this.month = selectedValue;
-    this.getPharmaciesByDate();
-  }
-
-  changeYear(selectedValue: string) {
-    this.year = selectedValue;
-    this.getPharmaciesByDate();
-  }
-
 }
